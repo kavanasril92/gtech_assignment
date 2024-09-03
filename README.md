@@ -14,6 +14,11 @@ Create Database
 - Govtech-Assignment\Scripts\activate
 - python Govtech-Assignment\app.py
 
+### 5. Load SwaggerUI
+- https://editor.swagger.io/
+- Import 'GTech-Assignment-SwaggerUI.yaml' file
+- Test & Verify Endpoints
+
 
 ## __Appendix__
 
