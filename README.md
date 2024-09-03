@@ -4,13 +4,13 @@ GTech Assignment
 ### 1. Download Govtech-Assignment.7z
 Unzip 7z File
 
-### 1. Install prevailing version of MariaDB
+### 2. Install prevailing version of MariaDB
 Create Database
 - CREATE DATABASE govtech_assignment
 
-### 2. Run Scripts in SQL Folder in sequence
+### 3. Run Scripts in SQL Folder in sequence
 
-### 3. Run Application Codes (Ensure Python is installed)
+### 4. Run Application Codes (Ensure Python is installed)
 - Govtech-Assignment\Scripts\activate
 - python Govtech-Assignment\app.py
 
