@@ -1,0 +1,22 @@
+CREATE TABLE `ic_criterias` (
+	`id` UUID NOT NULL DEFAULT uuid(),
+	`scheme_id` UUID NOT NULL,
+	`employment_status_id` UUID NOT NULL,
+	`school_level` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8mb3_general_ci',
+	`valid_id` INT(11) NOT NULL,
+	`create_time` DATETIME NOT NULL DEFAULT current_timestamp(),
+	`change_time` DATETIME NOT NULL DEFAULT current_timestamp(),
+	PRIMARY KEY (`id`) USING BTREE,
+	INDEX `FK_ic_criteria_scheme_id` (`scheme_id`) USING BTREE,
+	INDEX `FK_ic_criteria_employment_status_id` (`employment_status_id`) USING BTREE,
+	INDEX `FK_ic_criteria_valid_id` (`valid_id`) USING BTREE,
+	CONSTRAINT `FK_ic_criteria_employment_status_id` FOREIGN KEY (`employment_status_id`) REFERENCES `ic_employment_status` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `FK_ic_criteria_scheme_id` FOREIGN KEY (`scheme_id`) REFERENCES `ic_schemes` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `FK_ic_criteria_valid_id` FOREIGN KEY (`valid_id`) REFERENCES `ic_valid` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COMMENT='Master Table for Criterias'
+COLLATE='utf8mb3_general_ci'
+ENGINE=InnoDB
+;
+
+INSERT INTO ic_criterias (scheme_id, employment_status_id, school_level, valid_id, create_time, change_time) SELECT (SELECT id FROM ic_schemes WHERE NAME = 'Retrenchment Assistance Scheme' LIMIT 1), (SELECT id FROM ic_employment_status WHERE NAME = 'Unemployed' LIMIT 1), NULL, (SELECT id FROM ic_valid WHERE NAME = 'valid' LIMIT 1),NOW(), NOW() UNION ALL SELECT (SELECT id FROM ic_schemes WHERE NAME = 'Retrenchment Assistance Scheme (families)' LIMIT 1), (SELECT id FROM ic_employment_status WHERE NAME = 'Unemployed' LIMIT 1), 'Primary', (SELECT id FROM ic_valid WHERE NAME = 'valid' LIMIT 1),NOW(), NOW();

@@ -1,0 +1,30 @@
+## Insert Household: For James
+INSERT INTO ic_household (valid_id) VALUES ((SELECT id FROM ic_valid WHERE NAME = 'Valid' LIMIT 1));
+
+## Insert Client: James
+INSERT INTO ic_clientele (NAME, sex_id, employment_status_id, valid_id, date_of_birth, marital_status_id, create_time, change_time) SELECT 'James', (SELECT id FROM ic_sex WHERE NAME = 'Male' LIMIT 1), (SELECT id FROM ic_employment_status WHERE NAME = 'Unemployed' LIMIT 1), (SELECT id FROM ic_valid WHERE NAME = 'Valid' LIMIT 1), STR_TO_DATE('1990-07-01', '%Y-%m-%d'), (SELECT id FROM ic_marital_status WHERE NAME = 'Single' LIMIT 1), NOW(), NOW(); 
+
+## Insert Household Client: James
+INSERT INTO ic_household_clientele (valid_id, clientele_id, household_id, relation_id, create_time, change_time) SELECT (SELECT id FROM ic_valid WHERE NAME = 'Valid' LIMIT 1), (SELECT id FROM ic_clientele WHERE NAME = 'James' LIMIT 1), (SELECT id FROM ic_household hh WHERE NOT EXISTS (SELECT household_id FROM ic_household_clientele hhc WHERE hh.id = hhc.household_id) LIMIT 1), (SELECT id FROM ic_relation WHERE NAME = 'Husband' LIMIT 1), NOW(), NOW();
+
+
+## Insert Household: For Mary
+INSERT INTO ic_household (valid_id) VALUES ((SELECT id FROM ic_valid WHERE NAME = 'Valid' LIMIT 1));
+
+## Insert Client: Mary
+INSERT INTO ic_clientele (NAME, sex_id, employment_status_id, valid_id, date_of_birth, marital_status_id, create_time, change_time) SELECT 'Mary', (SELECT id FROM ic_sex WHERE NAME = 'Female' LIMIT 1), (SELECT id FROM ic_employment_status WHERE NAME = 'Unemployed' LIMIT 1), (SELECT id FROM ic_valid WHERE NAME = 'Valid' LIMIT 1), STR_TO_DATE('1984-10-06', '%Y-%m-%d'), (SELECT id FROM ic_marital_status WHERE NAME = 'Married' LIMIT 1), NOW(), NOW(); 
+
+## Insert Household Client: Mary
+INSERT INTO ic_household_clientele (valid_id, clientele_id, household_id, relation_id, create_time, change_time) SELECT (SELECT id FROM ic_valid WHERE NAME = 'Valid' LIMIT 1), (SELECT id FROM ic_clientele WHERE NAME = 'Mary' LIMIT 1), (SELECT id FROM ic_household hh WHERE NOT EXISTS (SELECT household_id FROM ic_household_clientele hhc WHERE hh.id = hhc.household_id) LIMIT 1), (SELECT id FROM ic_relation WHERE NAME = 'Wife' LIMIT 1), NOW(), NOW();
+
+## Insert Client: Gwen
+INSERT INTO ic_clientele (NAME, sex_id, employment_status_id, valid_id, date_of_birth, create_time, change_time) SELECT 'Gwen', (SELECT id FROM ic_sex WHERE NAME = 'Female' LIMIT 1), (SELECT id FROM ic_employment_status WHERE NAME = 'Unemployed' LIMIT 1), (SELECT id FROM ic_valid WHERE NAME = 'Valid' LIMIT 1), STR_TO_DATE('2016-02-01', '%Y-%m-%d'), NOW(), NOW(); 
+
+## Insert Household Client: Gwen
+INSERT INTO ic_household_clientele (valid_id, clientele_id, household_id, relation_id, create_time, change_time) SELECT (SELECT id FROM ic_valid WHERE NAME = 'Valid' LIMIT 1), (SELECT id FROM ic_clientele WHERE NAME = 'Gwen' LIMIT 1), (SELECT household_id FROM ic_household_clientele WHERE clientele_id = (SELECT id FROM ic_clientele WHERE NAME = 'Mary' LIMIT 1) LIMIT 1), (SELECT id FROM ic_relation WHERE NAME = 'Daughter' LIMIT 1), NOW(), NOW();
+
+## Insert Client: Jayden
+INSERT INTO ic_clientele (NAME, sex_id, employment_status_id, valid_id, date_of_birth, create_time, change_time) SELECT 'Jayden', (SELECT id FROM ic_sex WHERE NAME = 'Male' LIMIT 1), (SELECT id FROM ic_employment_status WHERE NAME = 'Unemployed' LIMIT 1), (SELECT id FROM ic_valid WHERE NAME = 'Valid' LIMIT 1), STR_TO_DATE('2018-03-15', '%Y-%m-%d'), NOW(), NOW(); 
+
+## Insert Household Client: Jayden
+INSERT INTO ic_household_clientele (valid_id, clientele_id, household_id, relation_id, create_time, change_time) SELECT (SELECT id FROM ic_valid WHERE NAME = 'Valid' LIMIT 1), (SELECT id FROM ic_clientele WHERE NAME = 'Jayden' LIMIT 1), (SELECT household_id FROM ic_household_clientele WHERE clientele_id = (SELECT id FROM ic_clientele WHERE NAME = 'Mary' LIMIT 1) LIMIT 1), (SELECT id FROM ic_relation WHERE NAME = 'Son' LIMIT 1), NOW(), NOW();

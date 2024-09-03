@@ -1,0 +1,19 @@
+CREATE TABLE `ic_applications` (
+	`id` UUID NOT NULL DEFAULT uuid(),
+	`applicant_id` UUID NOT NULL DEFAULT uuid(),
+	`scheme_id` UUID NOT NULL DEFAULT uuid(),
+	`valid_id` INT(11) NOT NULL,
+	`create_time` DATETIME NOT NULL DEFAULT current_timestamp(),
+	`change_time` DATETIME NOT NULL DEFAULT current_timestamp(),
+	PRIMARY KEY (`id`) USING BTREE,
+	INDEX `FK_ic_applications_applicant_id` (`applicant_id`) USING BTREE,
+	INDEX `FK_ic_applications_scheme_id` (`scheme_id`) USING BTREE,
+	INDEX `FK_ic_applications_valid_id` (`valid_id`) USING BTREE,
+	CONSTRAINT `FK_ic_applications_applicant_id` FOREIGN KEY (`applicant_id`) REFERENCES `ic_applicants` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `FK_ic_applications_scheme_id` FOREIGN KEY (`scheme_id`) REFERENCES `ic_schemes` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `FK_ic_applications_valid_id` FOREIGN KEY (`valid_id`) REFERENCES `ic_valid` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COMMENT='Transaction Table for Application for Schemes'
+COLLATE='utf8mb3_general_ci'
+ENGINE=InnoDB
+;

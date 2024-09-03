@@ -1,0 +1,19 @@
+CREATE TABLE `ic_schemes_benefits` (
+	`id` UUID NOT NULL DEFAULT uuid(),
+	`scheme_id` UUID NOT NULL DEFAULT uuid(),
+	`benefit_id` UUID NOT NULL DEFAULT uuid(),
+	`valid_id` INT(11) NOT NULL,
+	`create_time` DATETIME NOT NULL DEFAULT current_timestamp(),
+	`change_time` DATETIME NOT NULL DEFAULT current_timestamp(),
+	PRIMARY KEY (`id`) USING BTREE,
+	INDEX `FK_ic_schemes_benefits_scheme_id` (`scheme_id`) USING BTREE,
+	INDEX `FK_ic_schemes_benefits_benefit_id` (`benefit_id`) USING BTREE,
+	CONSTRAINT `FK_ic_schemes_benefits_benefit_id` FOREIGN KEY (`benefit_id`) REFERENCES `ic_benefits` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `FK_ic_schemes_benefits_scheme_id` FOREIGN KEY (`scheme_id`) REFERENCES `ic_schemes` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COMMENT='Transaction Table for Scheme-Benefits'
+COLLATE='utf8mb3_general_ci'
+ENGINE=InnoDB
+;
+
+INSERT INTO ic_schemes_benefits (scheme_id, benefit_id, valid_id, create_time, change_time) SELECT (SELECT id FROM ic_schemes WHERE NAME = 'Retrenchment Assistance Scheme' LIMIT 1), (SELECT id FROM ic_benefits WHERE NAME = 'SkillsFuture Credits' LIMIT 1), (SELECT id FROM ic_valid WHERE NAME = 'valid' LIMIT 1),NOW(), NOW();

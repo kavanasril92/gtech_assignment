@@ -1,0 +1,15 @@
+CREATE TABLE `ic_applicants` (
+	`id` UUID NOT NULL DEFAULT uuid(),
+	`clientele_id` UUID NOT NULL,
+	`valid_id` INT(11) NOT NULL,
+	`create_time` DATETIME NOT NULL DEFAULT current_timestamp(),
+	`change_time` DATETIME NOT NULL DEFAULT current_timestamp(),
+	PRIMARY KEY (`id`) USING BTREE,
+	INDEX `FK_ic_applicants_valid_id` (`valid_id`) USING BTREE,
+	INDEX `FK_applicant_id` (`clientele_id`) USING BTREE,
+	CONSTRAINT `FK_applicant_id` FOREIGN KEY (`clientele_id`) REFERENCES `ic_clientele` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COMMENT='Master Table for Applicants'
+COLLATE='utf8mb3_general_ci'
+ENGINE=InnoDB
+;

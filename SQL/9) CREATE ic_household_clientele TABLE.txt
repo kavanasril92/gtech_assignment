@@ -1,0 +1,22 @@
+CREATE TABLE `ic_household_clientele` (
+	`id` UUID NOT NULL DEFAULT uuid(),
+	`valid_id` INT(11) NOT NULL,
+	`clientele_id` UUID NOT NULL,
+	`household_id` UUID NOT NULL,
+	`relation_id` UUID NOT NULL,
+	`create_time` DATETIME NOT NULL DEFAULT current_timestamp(),
+	`change_time` DATETIME NOT NULL DEFAULT current_timestamp(),
+	PRIMARY KEY (`id`) USING BTREE,
+	INDEX `FK_ic_household_clientele_valid_id` (`valid_id`) USING BTREE,
+	INDEX `FK_ic_household_clientele_clientele_id` (`clientele_id`) USING BTREE,
+	INDEX `FK_ic_household_clientele_household_id` (`household_id`) USING BTREE,
+	INDEX `FK_ic_household_clientele_relation_id` (`relation_id`) USING BTREE,
+	CONSTRAINT `FK_ic_household_clientele_clientele_id` FOREIGN KEY (`clientele_id`) REFERENCES `ic_clientele` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `FK_ic_household_clientele_household_id` FOREIGN KEY (`household_id`) REFERENCES `ic_household` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `FK_ic_household_clientele_relation_id` FOREIGN KEY (`relation_id`) REFERENCES `ic_relation` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `FK_ic_household_clientele_valid_id` FOREIGN KEY (`valid_id`) REFERENCES `ic_valid` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COMMENT='Transaction Table for Clientele'
+COLLATE='utf8mb3_general_ci'
+ENGINE=InnoDB
+;

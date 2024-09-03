@@ -1,0 +1,17 @@
+CREATE TABLE `ic_relation` (
+	`id` UUID NOT NULL DEFAULT uuid(),
+	`name` VARCHAR(255) NOT NULL COLLATE 'utf8mb3_general_ci',
+	`valid_id` INT(11) NOT NULL,
+	`create_time` DATETIME NOT NULL DEFAULT current_timestamp(),
+	`change_time` DATETIME NOT NULL DEFAULT current_timestamp(),
+	PRIMARY KEY (`id`) USING BTREE,
+	UNIQUE INDEX `ic_relation_name` (`name`) USING BTREE,
+	INDEX `FK_ic_relation_valid_id` (`valid_id`) USING BTREE,
+	CONSTRAINT `FK_ic_relation_valid_id` FOREIGN KEY (`valid_id`) REFERENCES `ic_valid` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COMMENT='Master Table for Relationship to Household'
+COLLATE='utf8mb3_general_ci'
+ENGINE=InnoDB
+;
+
+INSERT INTO ic_relation (name, valid_id, create_time, change_time) SELECT 'Husband', (SELECT id FROM ic_valid WHERE NAME = 'valid' LIMIT 1),NOW(), NOW() UNION ALL SELECT 'Wife', (SELECT id FROM ic_valid WHERE NAME = 'valid' LIMIT 1), NOW(), NOW() UNION ALL SELECT 'Son', (SELECT id FROM ic_valid WHERE NAME = 'valid' LIMIT 1), NOW(), NOW() UNION ALL SELECT 'Daughter', (SELECT id FROM ic_valid WHERE NAME = 'valid' LIMIT 1), NOW(), NOW() UNION ALL SELECT 'Grandparent', (SELECT id FROM ic_valid WHERE NAME = 'valid' LIMIT 1), NOW(), NOW();

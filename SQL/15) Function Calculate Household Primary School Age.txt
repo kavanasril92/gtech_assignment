@@ -1,0 +1,24 @@
+CREATE DEFINER=`root`@`localhost` FUNCTION `sp_calculate_household_primary_age`(
+	`ApplicantID` UUID
+)
+RETURNS int(11)
+LANGUAGE SQL
+NOT DETERMINISTIC
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT ''
+BEGIN
+	DECLARE PrimaryAgeFlag INT(10);
+	DECLARE HouseholdID UUID;
+	DECLARE ClienteleID UUID;
+	DECLARE DateOfBirth DATETIME;
+	
+	## Get Household & Client
+	SELECT household_id, clientele_id INTO HouseholdID, ClienteleID FROM ic_household_clientele WHERE clientele_id = (SELECT clientele_id FROM ic_applicants WHERE id = ApplicantID);
+	
+	## Get count of Primary School children in household
+	SELECT COUNT(1) INTO PrimaryAgeFlag FROM (SELECT TIMESTAMPDIFF(YEAR, cli.date_of_birth, CURDATE()) AS `AGE` FROM ic_household_clientele hc LEFT JOIN ic_clientele cli ON hc.clientele_id = cli.id WHERE household_id = HouseholdID AND relation_id IN (SELECT id FROM ic_relation WHERE NAME IN ('Son', 'Daughter'))) T1 WHERE `AGE` BETWEEN 7 AND 12;
+	
+	RETURN PrimaryAgeFlag;
+	
+END
