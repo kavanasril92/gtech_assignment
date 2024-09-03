@@ -1,0 +1,437 @@
+openapi: 3.0.3
+info:
+  title: Financial Assistance Scheme Application
+  description: |-
+    The Financial Assistance Scheme API allows administrators to remotely manage Applications & Financial Assistance Schemes
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/api
+tags:
+  - name: applicants
+    description: Register & Retrieve List of Applicants
+  - name: schemes
+    description: Retrieve Schemes & Eligibility of Applicants
+  - name: applications
+    description: Register & Retrieve List of Applications
+paths:
+  /applicants:
+    get:
+      tags:
+        - applicants
+      summary: Retrieve all Applicants
+      operationId: applicants
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Applicant'          
+        '400':
+          description: Invalid value
+      security:
+        - gtech_auth:
+            - write:gtech
+            - read:gtech
+    post:
+      tags:
+        - applicants
+      summary: Add New Applicant
+      operationId: addApplicant
+      requestBody:
+        description: Applicant's name 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicantName'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+      security:
+        - gtech_auth:
+            - write:gtech
+            - read:gtech
+            
+  /schemes:
+    get:
+      tags:
+        - schemes
+      summary: Retrieve All Schemes
+      operationId: schemes
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Scheme_All'          
+        '400':
+          description: Invalid value
+      security:
+        - gtech_auth:
+            - write:gtech
+            - read:gtech
+            
+  /schemes/eligibility:
+    get:
+      tags:
+        - schemes
+      summary: Retrieve All Eligibility of Applicant for Schemes
+      operationId: schemesEligibility
+      parameters:
+        - name: applicant
+          in: query
+          description: Applicant's ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Scheme_Eligibility'          
+        '400':
+          description: Invalid value
+      security:
+        - gtech_auth:
+            - write:gtech
+            - read:gtech
+            
+  /applications:
+    get:
+      tags:
+        - applications
+      summary: Retrieve all Applications
+      operationId: applications
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Application'          
+        '400':
+          description: Invalid value
+      security:
+        - gtech_auth:
+            - write:gtech
+            - read:gtech
+    post:
+      tags:
+        - applications
+      summary: Add New Application
+      operationId: addApplication
+      requestBody:
+        description: Applicant's ID & Scheme ID
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationForScheme'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+      security:
+        - gtech_auth:
+            - write:gtech
+            - read:gtech
+  
+  
+  
+components:
+  schemas:
+    
+    Valid:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          format: string
+          example: Valid
+    Employment_Status:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a097ad9d-69ce-11ef-ba3f-80fa5b916385
+        name:
+          type: string
+          example: Unemployed
+        valid:
+          $ref: '#/components/schemas/Valid'
+    Sex:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a097ad9d-69ce-11ef-ba3f-80fa5b916385
+        name:
+          type: string
+          example: Male
+        valid:
+          $ref: '#/components/schemas/Valid'
+    Marital_Status:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a097ad9d-69ce-11ef-ba3f-80fa5b916385
+        name:
+          type: string
+          example: Married
+        valid:
+          $ref: '#/components/schemas/Valid'
+    Household:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a097ad9d-69ce-11ef-ba3f-80fa5b916385
+        valid:
+          $ref: '#/components/schemas/Valid'
+    Relation:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a097ad9d-69ce-11ef-ba3f-80fa5b916385
+        name:
+          type: string
+          example: Husband
+        valid:
+          $ref: '#/components/schemas/Valid'
+    Applicant:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a097ad9d-69ce-11ef-ba3f-80fa5b916385
+        name:
+          type: string
+          format: string
+          example: James
+        employment_status:
+          type: string
+          format: string
+          example: Unemployed
+        sex:
+          type: string
+          format: string
+          example: Male
+        date_of_birth:
+          type: string
+          format: string
+          example: '1970-01-01'
+        household:
+          type: array
+          items:
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: a097ad9d-69ce-11ef-ba3f-80fa5b916385
+              name:
+                type: string
+                format: string
+                example: Gwen
+              employment_status:
+                type: string
+                format: string
+                example: Employed
+              sex:
+                type: string
+                format: string
+                example: Female
+              date_of_birth:
+                type: string
+                format: string
+                example: '1970-01-01'
+              relation:
+                type: string
+                format: string
+                example: Daughter
+    ApplicantName:
+      type: object
+      properties:
+        name:
+          type: string
+          format: string
+          example: James
+    ApplicationForScheme:
+      type: object
+      properties:
+        applicant_id:
+          type: string
+          format: UUID
+          example: a4be3571-6849-11ef-ba3f-80fa5b916385
+        scheme_id:
+          type: string
+          format: UUID
+          example: a4be3571-6849-11ef-ba3f-80fa5b916385
+    Client:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a097ad9d-69ce-11ef-ba3f-80fa5b916385
+        name:
+          type: string
+          format: string
+          example: James
+        sex_id:
+          $ref: '#/components/schemas/Sex'
+        employment_status_id:
+          $ref: '#/components/schemas/Employment_Status'
+        marital_status_id:
+          $ref: '#/components/schemas/Marital_Status'
+        valid:
+          $ref: '#/components/schemas/Valid'
+          
+    Scheme_All:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a097ad9d-69ce-11ef-ba3f-80fa5b916385
+        name:
+          type: string
+          format: string
+          example: Retrenchment Assistance Scheme
+        benefits:
+          type: array
+          items:
+            $ref: '#/components/schemas/Benefits'
+        criteria:
+          $ref: '#/components/schemas/Criteria'
+          
+    Scheme_Eligibility:
+      type: array
+      items:
+        type: string
+        format: string
+        example: Retrenchment Assistance Scheme
+
+    Benefits:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a097ad9d-69ce-11ef-ba3f-80fa5b916385
+        name:
+          type: string
+          format: string
+          example: SkillsFuture Credits
+        amount:
+          type: number
+          format: double
+          example: 500.00
+    
+    Criteria:
+      type: object
+      properties:
+        unemployment_status:
+          type: string
+          format: string
+          example: Unemployed
+        has_children:
+          type: object
+          items:
+            properties:
+              school_level:
+                type: string
+                format: string
+                example: Primary
+                
+    Application:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a097ad9d-69ce-11ef-ba3f-80fa5b916385
+        name:
+          type: string
+          format: string
+          example: Mary
+        scheme:
+          type: string
+          format: string
+          example: Retrenchment Assistance Scheme (families)
+          
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  
+  securitySchemes:
+    gtech_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: http://localhost:5000/oauth/authorize
+          scopes:
+            write:gtech: modify with admin access
+            read:gtech: read with admin access
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
