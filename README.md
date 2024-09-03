@@ -2,7 +2,7 @@
 GTech Assignment
 
 ### 1. Download Govtech-Assignment.7z
-Unzip 7z File
+Unzip 7z File in preferred location
 
 ### 2. Install prevailing version of MariaDB
 Create Database
